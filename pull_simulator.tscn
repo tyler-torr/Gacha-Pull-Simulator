@@ -117,4 +117,12 @@ offset_right = 276.0
 offset_bottom = 401.0
 text = "Guarantee?"
 
+[node name="WeaponGuaranteeInput" type="CheckBox" parent="."]
+layout_mode = 0
+offset_left = 329.0
+offset_top = 370.0
+offset_right = 353.0
+offset_bottom = 394.0
+text = "Weapon Guarantee?"
+
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]

@@ -20,6 +20,7 @@ var banner = HSR_BANNER
 @onready var available_currency_input = $AvailableCurrencyInput
 @onready var simulation_runs_input = $SimulationRunsInput
 @onready var guarantee_input = $GuaranteeInput
+@onready var weapon_guarantee_input = $WeaponGuaranteeInput
 
 
 func ready() -> void:
@@ -58,7 +59,7 @@ func wep_fifty_fifty(guarantee: bool) -> bool:
 	return guarantee or randf() <= banner["wep_premium_chance"]
 
 
-func simulate_pulls(desired_five_stars: int, desired_five_star_weapons: int, available_pulls: int, simulation_runs: int, guarantee: bool) -> float:
+func simulate_pulls(desired_five_stars: int, desired_five_star_weapons: int, available_pulls: int, simulation_runs: int, guarantee: bool, weapon_guarantee: bool) -> float:
 	var total_success = 0
 	
 	for i in range(simulation_runs):
@@ -68,39 +69,36 @@ func simulate_pulls(desired_five_stars: int, desired_five_star_weapons: int, ava
 		var pity = 0
 		var wep_pity = 0
 		var current_guarantee = guarantee
-		var wep_guarantee = false
+		var wep_guarantee = weapon_guarantee
 		
-		while remaining_pulls != 0 and five_stars_pulled < desired_five_stars:
+		while remaining_pulls > 0:
 			remaining_pulls -= 1
 			
 			# Character banners
-			if pull(pity):
-				pity = 0
-				if fifty_fifty(current_guarantee):
-					current_guarantee = false
-					five_stars_pulled += 1
+			if five_stars_pulled < desired_five_stars:
+				if pull(pity):
+					pity = 0
+					if fifty_fifty(current_guarantee):
+						current_guarantee = false
+						five_stars_pulled += 1
+					else:
+						current_guarantee = true
 				else:
-					current_guarantee = true
-			else:
-				pity += 1
+					pity += 1
+			
+			elif weapons_pulled < desired_five_star_weapons:
+				if wep_pull(wep_pity):
+					wep_pity = 0
+					if wep_fifty_fifty(wep_guarantee):
+						current_guarantee = false
+						weapons_pulled += 1
+					else:
+						current_guarantee = true
+				else:
+					wep_pity += 1
 		
-		while remaining_pulls != 0 and weapons_pulled < desired_five_star_weapons:
-			remaining_pulls -= 1
-			
-			# Weapon banners
-			if wep_pull(wep_pity):
-				wep_pity = 0
-				if wep_fifty_fifty(current_guarantee):
-					current_guarantee = false
-					weapons_pulled += 1
-				else:
-					current_guarantee = true
-			else:
-				wep_pity += 1
-			
-			if (five_stars_pulled >= desired_five_stars) and (weapons_pulled >= desired_five_star_weapons):
-				total_success += 1
-				break
+		if (five_stars_pulled >= desired_five_stars) and (weapons_pulled >= desired_five_star_weapons):
+			total_success += 1
 	
 	return float(total_success) / float(simulation_runs)
 
@@ -112,9 +110,10 @@ func _on_run_button_pressed() -> void:
 	var available_currency = int(available_currency_input.value)
 	var simulation_runs = int(simulation_runs_input.value)
 	var guarantee = guarantee_input.is_pressed()
+	var weapon_guarantee = weapon_guarantee_input.is_pressed()
 	
 	available_pulls += (available_currency / 160)
 	
-	var average_success = simulate_pulls(desired_five_stars, desired_five_star_weapons, available_pulls, simulation_runs, guarantee)
+	var average_success = simulate_pulls(desired_five_stars, desired_five_star_weapons, available_pulls, simulation_runs, guarantee, weapon_guarantee)
 	
-	$ResultLabel.text = "Success rate: " + str(average_success * 100) + "%"
+	$ResultLabel.text = "Success Rate: " + str(average_success * 100) + "%"
