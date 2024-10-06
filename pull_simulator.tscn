@@ -11,7 +11,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2xeyb")
 
+[node name="Label6" type="Label" parent="."]
+offset_left = 158.0
+offset_top = 369.0
+offset_right = 277.0
+offset_bottom = 392.0
+text = "Pity"
+
 [node name="Label5" type="Label" parent="."]
+layout_mode = 0
 offset_left = 158.0
 offset_top = 119.0
 offset_right = 277.0
@@ -27,6 +35,7 @@ offset_bottom = 67.0
 text = "# of Characters"
 
 [node name="Label4" type="Label" parent="."]
+layout_mode = 0
 offset_left = 158.0
 offset_top = 260.0
 offset_right = 245.0
@@ -75,6 +84,7 @@ offset_bottom = 75.0
 max_value = 100000.0
 
 [node name="FiveStarWeaponInput" type="SpinBox" parent="."]
+layout_mode = 0
 offset_left = 319.0
 offset_top = 119.0
 offset_right = 402.063
@@ -89,7 +99,8 @@ offset_right = 402.063
 offset_bottom = 229.0
 max_value = 100000.0
 
-[node name="AvailableCurrencyInput" type="SpinBox" parent="."]
+[node name="AvailableGemsInput" type="SpinBox" parent="."]
+layout_mode = 0
 offset_left = 319.0
 offset_top = 260.0
 offset_right = 402.063
@@ -105,12 +116,27 @@ offset_bottom = 352.0
 max_value = 100000.0
 value = 10000.0
 
-[node name="GuaranteeInput" type="CheckBox" parent="."]
+[node name="PityInput" type="SpinBox" parent="."]
+offset_left = 319.0
+offset_top = 369.0
+offset_right = 402.063
+offset_bottom = 400.0
+max_value = 100000.0
+
+[node name="WeaponGuaranteeInput" type="CheckBox" parent="."]
 layout_mode = 0
 offset_left = 158.0
-offset_top = 370.0
-offset_right = 276.0
-offset_bottom = 401.0
-text = "Guarantee?"
+offset_top = 413.0
+offset_right = 182.0
+offset_bottom = 437.0
+text = "Weapon Guarantee?"
+
+[node name="CharacterGuaranteeInput" type="CheckBox" parent="."]
+layout_mode = 0
+offset_left = 386.0
+offset_top = 413.0
+offset_right = 584.0
+offset_bottom = 444.0
+text = "Character Guarantee?"
 
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
