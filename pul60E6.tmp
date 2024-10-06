@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcsorq4a7hvee"]
+
+[ext_resource type="Script" path="res://pull_simulator.gd" id="1_2xeyb"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2xeyb")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 136.0
+offset_right = 198.0
+offset_bottom = 159.0
+text = "# of Characters"
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 158.0
+offset_top = 259.0
+offset_right = 231.0
+offset_bottom = 282.0
+text = "# of Runs"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 199.0
+offset_right = 229.0
+offset_bottom = 222.0
+text = "# of Pulls"
+
+[node name="ResultLabel" type="Label" parent="."]
+offset_left = 316.0
+offset_top = 398.0
+offset_right = 387.0
+offset_bottom = 421.0
+text = "Success Rate: 0%"
+
+[node name="RunButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 466.0
+offset_top = 167.0
+offset_right = 592.0
+offset_bottom = 198.0
+text = "Run Simulation
+"
+
+[node name="FiveStarCharacterInput" type="SpinBox" parent="."]
+offset_left = 319.0
+offset_top = 136.0
+offset_right = 402.063
+offset_bottom = 167.0
+
+[node name="AvailablePullsInput" type="SpinBox" parent="."]
+layout_mode = 0
+offset_left = 319.0
+offset_top = 198.0
+offset_right = 402.063
+offset_bottom = 229.0
+
+[node name="SimulationRunsInput" type="SpinBox" parent="."]
+offset_left = 319.0
+offset_top = 259.0
+offset_right = 402.063
+offset_bottom = 290.0
+
+[connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
