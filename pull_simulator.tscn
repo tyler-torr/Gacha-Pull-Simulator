@@ -11,132 +11,172 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2xeyb")
 
-[node name="Label5" type="Label" parent="."]
+[node name="PullsLabel" type="Label" parent="."]
 layout_mode = 0
 offset_left = 52.0
-offset_top = 350.0
-offset_right = 171.0
-offset_bottom = 373.0
-text = "Weapons"
+offset_top = 180.0
+offset_right = 123.0
+offset_bottom = 203.0
+text = "Pulls"
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 52.0
-offset_top = 236.0
-offset_right = 171.0
-offset_bottom = 259.0
-text = "Characters"
-
-[node name="Label4" type="Label" parent="."]
+[node name="CurrencyLabel" type="Label" parent="."]
 layout_mode = 0
 offset_left = 181.0
-offset_top = 92.0
+offset_top = 180.0
 offset_right = 268.0
-offset_bottom = 115.0
+offset_bottom = 203.0
 text = "Stellar Jade"
 
-[node name="Label3" type="Label" parent="."]
+[node name="GemsLabel" type="Label" parent="."]
+offset_left = 317.0
+offset_top = 180.0
+offset_right = 400.0
+offset_bottom = 203.0
+text = "Starlight"
+
+[node name="SimulationsLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 329.0
-offset_top = 92.0
-offset_right = 402.0
-offset_bottom = 115.0
+offset_left = 433.0
+offset_top = 180.0
+offset_right = 524.0
+offset_bottom = 203.0
 text = "Simulations"
 
-[node name="Label2" type="Label" parent="."]
+[node name="CharacterLabel" type="Label" parent="."]
 layout_mode = 0
 offset_left = 52.0
-offset_top = 92.0
-offset_right = 123.0
-offset_bottom = 115.0
-text = "Pulls"
+offset_top = 324.0
+offset_right = 171.0
+offset_bottom = 347.0
+text = "Characters"
+
+[node name="CharacterPityLabel" type="Label" parent="."]
+offset_left = 181.0
+offset_top = 324.0
+offset_right = 300.0
+offset_bottom = 347.0
+text = "Character Pity"
+
+[node name="WeaponLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 438.0
+offset_right = 135.0
+offset_bottom = 461.0
+text = "Weapons"
+
+[node name="WeaponPityLabel" type="Label" parent="."]
+offset_left = 181.0
+offset_top = 438.0
+offset_right = 300.0
+offset_bottom = 461.0
+text = "Weapon Pity"
 
 [node name="ResultLabel" type="Label" parent="."]
 layout_mode = 0
 offset_left = 857.0
-offset_top = 183.0
+offset_top = 271.0
 offset_right = 988.0
-offset_bottom = 206.0
+offset_bottom = 294.0
 text = "Success Rate: 0%"
 
 [node name="RunButton" type="Button" parent="."]
 layout_mode = 0
 offset_left = 857.0
-offset_top = 115.0
+offset_top = 203.0
 offset_right = 983.0
-offset_bottom = 146.0
+offset_bottom = 234.0
 text = "Run Simulation
 "
 
 [node name="AvailablePullsInput" type="SpinBox" parent="."]
 layout_mode = 0
 offset_left = 52.0
-offset_top = 44.0
+offset_top = 132.0
 offset_right = 135.063
-offset_bottom = 75.0
+offset_bottom = 163.0
 max_value = 100000.0
 
 [node name="AvailableCurrencyInput" type="SpinBox" parent="."]
 layout_mode = 0
 offset_left = 181.0
-offset_top = 44.0
+offset_top = 132.0
 offset_right = 264.063
-offset_bottom = 75.0
+offset_bottom = 163.0
+max_value = 100000.0
+
+[node name="AvailableGemsInput" type="SpinBox" parent="."]
+offset_left = 317.0
+offset_top = 132.0
+offset_right = 400.063
+offset_bottom = 163.0
 max_value = 100000.0
 
 [node name="SimulationRunsInput" type="SpinBox" parent="."]
 layout_mode = 0
-offset_left = 329.0
-offset_top = 44.0
-offset_right = 412.063
-offset_bottom = 75.0
+offset_left = 433.0
+offset_top = 132.0
+offset_right = 516.063
+offset_bottom = 163.0
 max_value = 100000.0
 value = 10000.0
 
 [node name="FiveStarCharacterInput" type="SpinBox" parent="."]
 layout_mode = 0
 offset_left = 52.0
-offset_top = 183.0
+offset_top = 271.0
 offset_right = 135.063
-offset_bottom = 214.0
+offset_bottom = 302.0
 max_value = 100000.0
 
 [node name="CharacterPityInput" type="SpinBox" parent="."]
 offset_left = 181.0
-offset_top = 183.0
+offset_top = 271.0
 offset_right = 264.063
-offset_bottom = 214.0
+offset_bottom = 302.0
 max_value = 100000.0
 
 [node name="GuaranteeInput" type="CheckBox" parent="."]
 layout_mode = 0
 offset_left = 329.0
-offset_top = 183.0
+offset_top = 271.0
 offset_right = 447.0
-offset_bottom = 214.0
+offset_bottom = 302.0
 text = "Guarantee?"
 
 [node name="FiveStarWeaponInput" type="SpinBox" parent="."]
 layout_mode = 0
 offset_left = 52.0
-offset_top = 299.0
+offset_top = 387.0
 offset_right = 135.063
-offset_bottom = 330.0
+offset_bottom = 418.0
 max_value = 100000.0
 
 [node name="WeaponPityInput" type="SpinBox" parent="."]
 offset_left = 181.0
-offset_top = 299.0
+offset_top = 387.0
 offset_right = 264.063
-offset_bottom = 330.0
+offset_bottom = 418.0
 max_value = 100000.0
 
 [node name="WeaponGuaranteeInput" type="CheckBox" parent="."]
 layout_mode = 0
 offset_left = 329.0
-offset_top = 299.0
+offset_top = 387.0
 offset_right = 515.0
-offset_bottom = 330.0
+offset_bottom = 418.0
 text = "Weapon Guarantee?"
 
+[node name="OptionButton" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 31.0
+offset_right = 84.0
+offset_bottom = 51.0
+item_count = 2
+popup/item_0/text = "Honkai Star Rail"
+popup/item_1/text = "Wuthering Waves"
+popup/item_1/id = 1
+
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
+[connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]
