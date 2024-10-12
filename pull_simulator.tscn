@@ -184,5 +184,17 @@ popup/item_0/text = "Honkai Star Rail"
 popup/item_1/text = "Wuthering Waves"
 popup/item_1/id = 1
 
+[node name="CopiesButton" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 317.0
+offset_top = 31.0
+offset_right = 433.0
+offset_bottom = 62.0
+item_count = 2
+popup/item_0/text = "Assume E0"
+popup/item_1/text = "Assume E6"
+popup/item_1/id = 1
+
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
 [connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="item_selected" from="CopiesButton" to="." method="_on_copies_button_item_selected"]
