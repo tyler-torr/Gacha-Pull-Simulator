@@ -72,13 +72,14 @@ func pull(banner_type: String, pity: int, four_star_pity: int) -> String:
 	var current_four_star_pull_rate = banner["4-STAR"]["PULL_RATE"]
 	var roll = randf()
 	
+	
 	if pity >= banner[banner_type]["HARD_PITY"]:
 		current_pull_rate = 1.0
 	elif pity >= banner[banner_type]["SOFT_PITY_START"]:
 		current_pull_rate += banner[banner_type]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
 	
 	if four_star_pity >= banner["4-STAR"]["HARD_PITY"]:
-		current_pull_rate = 1.0
+		current_four_star_pull_rate = 1.0
 	elif four_star_pity >= banner["4-STAR"]["SOFT_PITY_START"]:
 		current_four_star_pull_rate += banner["4-STAR"]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
 	
@@ -111,20 +112,19 @@ func simulate_banner(banner_type: String, five_stars_pulled: int, pity: int, fou
 			five_stars_pulled += 1
 		else:
 			guarantee = true
+	
+	elif pull == "4-STAR":
+		pity += 1
+		four_star_pity = 0
+		if fifty_fifty("4-STAR", four_star_guarantee):
+			four_star_guarantee = false
+			remaining_gems += banner["OTHER"]["4-STAR_EXCESS_GEM_GAIN"]
+		else:
+			four_star_guarantee = true
+			remaining_gems += banner["OTHER"]["4-STAR_GEM_GAIN"]
 	else:
 		pity += 1
-		if pull == "4-STAR":
-			if fifty_fifty("4-STAR", four_star_guarantee):
-				four_star_guarantee = false
-				if copies_preference == 0:
-					remaining_gems += banner["OTHER"]["4-STAR_GEM_GAIN"]
-				elif copies_preference == 1:
-					remaining_gems += banner["OTHER"]["4-STAR_EXCESS_GEM_GAIN"]
-			else:
-				four_star_guarantee = true
-				remaining_gems += banner["OTHER"]["4-STAR_GEM_GAIN"]
-		else:
-			four_star_pity += 1
+		four_star_pity += 1
 	return [five_stars_pulled, pity, four_star_pity, guarantee, four_star_guarantee, remaining_gems]
 
 
@@ -149,8 +149,8 @@ func simulate_pulls(available_pulls: int, available_currency: int, available_gem
 		var wep_guarantee = weapon_guarantee
 		var four_star_guarantee = false
 		
-		while remaining_pulls > 0 || remaining_gems >= banner["OTHER"]["GEM_CONVERSION_RATE"]:
-			if (remaining_gems >= banner["OTHER"]["GEM_CONVERSION_RATE"]):
+		while remaining_pulls > 0 or remaining_gems >= banner["OTHER"]["GEM_CONVERSION_RATE"]:
+			if remaining_gems >= banner["OTHER"]["GEM_CONVERSION_RATE"]:
 				remaining_pulls += gem_conversion(banner["OTHER"]["GEM_CONVERSION_RATE"], remaining_gems)
 				remaining_gems %= banner["OTHER"]["GEM_CONVERSION_RATE"]
 			remaining_pulls -= 1
@@ -176,6 +176,7 @@ func simulate_pulls(available_pulls: int, available_currency: int, available_gem
 		
 		if (five_stars_pulled >= desired_five_stars) and (weapons_pulled >= desired_five_star_weapons):
 			total_success += 1
+
 	
 	return float(total_success) / float(simulation_runs)
 
