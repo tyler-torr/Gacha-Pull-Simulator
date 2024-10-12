@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Banner" load_steps=2 format=3 uid="uid://ctluq20u1yr63"]
+
+[ext_resource type="Script" path="res://scripts/Banner.gd" id="1_ayymg"]
+
+[resource]
+script = ExtResource("1_ayymg")
+character_pity = 0
+weapon_pity = 0
+gem_conversion_rate = 0
+soft_pity_start = 0
+hard_pity = 0
+five_star_rate = 0.0
+weapon_five_star_rate = 0.0

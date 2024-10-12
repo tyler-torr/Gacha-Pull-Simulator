@@ -1,36 +1,6 @@
 extends Control
 
 
-const HSR_BANNER = {
-	"CHARACTER": {
-		"PULL_RATE": 0.006,
-		"PITY_RATE": 0.06,
-		"SOFT_PITY_START": 74,
-		"HARD_PITY": 90,
-		"FIFTY_FIFTY": 0.564 # According to 棵平衡樹, HSR's character banner has 56.4% odds to win
-	},
-	"WEAPON": {
-		"PULL_RATE": 0.008,
-		"PITY_RATE": 0.08,
-		"SOFT_PITY_START": 63,
-		"HARD_PITY": 80,
-		"FIFTY_FIFTY": 0.75
-	},
-	"4-STAR": {
-		"PULL_RATE": 0.051,
-		"PITY_RATE": 0.00, # Unknown value
-		"SOFT_PITY_START": 8, # Unknown value
-		"HARD_PITY": 10,
-		"FIFTY_FIFTY": 0.5
-	},
-	"OTHER": {
-		"GEM_CONVERSION_RATE": 20,
-		"4-STAR_GEM_GAIN": 8,
-		"4-STAR_EXCESS_GEM_GAIN": 20,
-		"5-STAR_GEM_GAIN": 40
-	}
-}
-
 const WUWA_BANNER = {
 	"CHARACTER": {
 		"PULL_RATE": 0.008,
@@ -67,9 +37,9 @@ func ready() -> void:
 	pass
 
 
-func pull(banner_type: String, pity: int, four_star_pity: int) -> String:
+func pull(banner_type: String, pity: int) -> String:
 	var current_pull_rate = banner[banner_type]["PULL_RATE"]
-	var current_four_star_pull_rate = banner["4-STAR"]["PULL_RATE"]
+	# var current_four_star_pull_rate = banner["4-STAR"]["PULL_RATE"]
 	var roll = randf()
 	
 	
@@ -78,15 +48,15 @@ func pull(banner_type: String, pity: int, four_star_pity: int) -> String:
 	elif pity >= banner[banner_type]["SOFT_PITY_START"]:
 		current_pull_rate += banner[banner_type]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
 	
-	if four_star_pity >= banner["4-STAR"]["HARD_PITY"]:
-		current_four_star_pull_rate = 1.0
-	elif four_star_pity >= banner["4-STAR"]["SOFT_PITY_START"]:
-		current_four_star_pull_rate += banner["4-STAR"]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
+	#if four_star_pity >= banner["4-STAR"]["HARD_PITY"]:
+		#current_four_star_pull_rate = 1.0
+	#elif four_star_pity >= banner["4-STAR"]["SOFT_PITY_START"]:
+		#current_four_star_pull_rate += banner["4-STAR"]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
 	
 	if current_pull_rate >= roll:
 		return "5-STAR"
-	elif current_four_star_pull_rate >= roll:
-		return "4-STAR"
+	#elif current_four_star_pull_rate >= roll:
+		#return "4-STAR"
 	else:
 		return "3-STAR"
 
@@ -99,13 +69,13 @@ func gem_conversion(conversion_rate: int, remaining_gems: int) -> int:
 	return remaining_gems / conversion_rate
 
 
-func simulate_banner(banner_type: String, five_stars_pulled: int, pity: int, four_star_pity: int, guarantee: bool,
-					four_star_guarantee: bool, remaining_gems: int) -> Array:
-	var pull = pull(banner_type, pity, four_star_pity)
+func simulate_banner(banner_type: String, five_stars_pulled: int, pity: int, guarantee: bool,
+					remaining_gems: int) -> Array:
+	var pull = pull(banner_type, pity)
 	
 	if pull == "5-STAR":
 		pity = 0
-		four_star_pity += 1
+		#four_star_pity += 1
 		remaining_gems += banner["OTHER"]["5-STAR_GEM_GAIN"]
 		if fifty_fifty(banner_type, guarantee):
 			guarantee = false
@@ -113,19 +83,19 @@ func simulate_banner(banner_type: String, five_stars_pulled: int, pity: int, fou
 		else:
 			guarantee = true
 	
-	elif pull == "4-STAR":
-		pity += 1
-		four_star_pity = 0
-		if fifty_fifty("4-STAR", four_star_guarantee):
-			four_star_guarantee = false
-			remaining_gems += banner["OTHER"]["4-STAR_EXCESS_GEM_GAIN"]
-		else:
-			four_star_guarantee = true
-			remaining_gems += banner["OTHER"]["4-STAR_GEM_GAIN"]
+	#elif pull == "4-STAR":
+		#pity += 1
+		#four_star_pity = 0
+		#if fifty_fifty("4-STAR", four_star_guarantee):
+			#four_star_guarantee = false
+			#remaining_gems += banner["OTHER"]["4-STAR_EXCESS_GEM_GAIN"]
+		#else:
+			#four_star_guarantee = true
+			#remaining_gems += banner["OTHER"]["4-STAR_GEM_GAIN"]
 	else:
 		pity += 1
-		four_star_pity += 1
-	return [five_stars_pulled, pity, four_star_pity, guarantee, four_star_guarantee, remaining_gems]
+		#four_star_pity += 1
+	return [five_stars_pulled, pity, guarantee, remaining_gems]
 
 
 func simulate_pulls(available_pulls: int, available_currency: int, available_gems: int, simulation_runs: int,
@@ -157,22 +127,18 @@ func simulate_pulls(available_pulls: int, available_currency: int, available_gem
 			
 			# Character banners
 			if five_stars_pulled < desired_five_stars:
-				var result: Array = simulate_banner("CHARACTER", five_stars_pulled, pity, four_star_pity, current_guarantee, four_star_guarantee, remaining_gems)
+				var result: Array = simulate_banner("CHARACTER", five_stars_pulled, pity, current_guarantee, remaining_gems)
 				five_stars_pulled = result[0]
 				pity = result[1]
-				four_star_pity = result[2]
-				current_guarantee = result[3]
-				four_star_guarantee = result[4]
-				remaining_gems = result[5]
+				current_guarantee = result[2]
+				remaining_gems = result[3]
 			# Weapon banners
 			if weapons_pulled < desired_five_star_weapons:
-				var result: Array = simulate_banner("WEAPON", weapons_pulled, wep_pity, wep_four_star_pity, wep_guarantee, four_star_guarantee, remaining_gems)
+				var result: Array = simulate_banner("WEAPON", weapons_pulled, wep_pity, wep_guarantee, remaining_gems)
 				weapons_pulled = result[0]
 				wep_pity = result[1]
-				wep_four_star_pity = result[2]
-				wep_guarantee = result[3]
-				four_star_guarantee = result[4]
-				remaining_gems = result[5]
+				wep_guarantee = result[2]
+				remaining_gems = result[3]
 		
 		if (five_stars_pulled >= desired_five_stars) and (weapons_pulled >= desired_five_star_weapons):
 			total_success += 1
