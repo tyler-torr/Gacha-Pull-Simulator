@@ -1,7 +1,4 @@
 res://scenes/pull_simulator.tscn
-res://pull_simulator.gd
-res://resources/hsr_banner.gd
 res://scripts/pull_simulator.gd
-res://resources/HSRBanner.gd
-res://Banner.gd
 res://scripts/Banner.gd
+res://resources/HSRBanner.tres

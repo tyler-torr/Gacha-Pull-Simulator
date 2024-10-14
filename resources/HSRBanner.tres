@@ -4,10 +4,28 @@
 
 [resource]
 script = ExtResource("1_ayymg")
-character_pity = 0
-weapon_pity = 0
-gem_conversion_rate = 0
-soft_pity_start = 0
-hard_pity = 0
-five_star_rate = 0.0
-weapon_five_star_rate = 0.0
+char_pity = 0
+char_guarantee = false
+wep_pity = 0
+wep_guarantee = false
+char_4_star_pity = 0
+char_4_star_guarantee = false
+wep_4_star_pity = 0
+wep_4_star_guarantee = false
+char_pull_rate = 0.006
+char_soft_pity_start = 0
+char_soft_pity_rate = 74.0
+char_hard_pity = 90
+char_fifty_fifty = 0.564
+wep_pull_rate = 0.008
+wep_soft_pity_start = 0
+wep_soft_pity_rate = 63.0
+wep_hard_pity = 80
+wep_fifty_fifty = 0.75
+four_star_avg_rate = 8
+four_star_fifty_fifty = 0.5
+jade_conversion_rate = 160
+gem_conversion_rate = 20
+gem_4_star_gain = 8
+gem_4_star_excess_gain = 20
+gem_5_star_gain = 40

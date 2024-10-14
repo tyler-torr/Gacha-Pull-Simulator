@@ -39,7 +39,6 @@ func ready() -> void:
 
 func pull(banner_type: String, pity: int) -> String:
 	var current_pull_rate = banner[banner_type]["PULL_RATE"]
-	# var current_four_star_pull_rate = banner["4-STAR"]["PULL_RATE"]
 	var roll = randf()
 	
 	
@@ -47,16 +46,9 @@ func pull(banner_type: String, pity: int) -> String:
 		current_pull_rate = 1.0
 	elif pity >= banner[banner_type]["SOFT_PITY_START"]:
 		current_pull_rate += banner[banner_type]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
-	
-	#if four_star_pity >= banner["4-STAR"]["HARD_PITY"]:
-		#current_four_star_pull_rate = 1.0
-	#elif four_star_pity >= banner["4-STAR"]["SOFT_PITY_START"]:
-		#current_four_star_pull_rate += banner["4-STAR"]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
-	
+
 	if current_pull_rate >= roll:
 		return "5-STAR"
-	#elif current_four_star_pull_rate >= roll:
-		#return "4-STAR"
 	else:
 		return "3-STAR"
 
@@ -75,7 +67,6 @@ func simulate_banner(banner_type: String, five_stars_pulled: int, pity: int, gua
 	
 	if pull == "5-STAR":
 		pity = 0
-		#four_star_pity += 1
 		remaining_gems += banner["OTHER"]["5-STAR_GEM_GAIN"]
 		if fifty_fifty(banner_type, guarantee):
 			guarantee = false
@@ -83,18 +74,8 @@ func simulate_banner(banner_type: String, five_stars_pulled: int, pity: int, gua
 		else:
 			guarantee = true
 	
-	#elif pull == "4-STAR":
-		#pity += 1
-		#four_star_pity = 0
-		#if fifty_fifty("4-STAR", four_star_guarantee):
-			#four_star_guarantee = false
-			#remaining_gems += banner["OTHER"]["4-STAR_EXCESS_GEM_GAIN"]
-		#else:
-			#four_star_guarantee = true
-			#remaining_gems += banner["OTHER"]["4-STAR_GEM_GAIN"]
 	else:
 		pity += 1
-		#four_star_pity += 1
 	return [five_stars_pulled, pity, guarantee, remaining_gems]
 
 
