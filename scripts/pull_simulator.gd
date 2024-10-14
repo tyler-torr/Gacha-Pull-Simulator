@@ -19,7 +19,6 @@ const WUWA_BANNER = {
 }
 
 var banner
-var copies_preference = 0
 
 @onready var available_pulls_input = $AvailablePullsInput
 @onready var available_currency_input = $AvailableCurrencyInput
@@ -34,87 +33,48 @@ var copies_preference = 0
 
 
 func ready() -> void:
-	pass
+	banner = load("res://resources/HSRBanner.tres")
 
 
-func pull(banner_type: String, pity: int) -> String:
-	var current_pull_rate = banner[banner_type]["PULL_RATE"]
-	var roll = randf()
-	
-	
-	if pity >= banner[banner_type]["HARD_PITY"]:
-		current_pull_rate = 1.0
-	elif pity >= banner[banner_type]["SOFT_PITY_START"]:
-		current_pull_rate += banner[banner_type]["PITY_RATE"] * (pity - banner[banner_type]["SOFT_PITY_START"] + 1)
-
-	if current_pull_rate >= roll:
-		return "5-STAR"
-	else:
-		return "3-STAR"
-
-
-func fifty_fifty(banner_type: String, guarantee: bool) -> bool:
-	return guarantee or randf() <= banner[banner_type]["FIFTY_FIFTY"]
-
-
-func gem_conversion(conversion_rate: int, remaining_gems: int) -> int:
-	return remaining_gems / conversion_rate
-
-
-func simulate_banner(banner_type: String, five_stars_pulled: int, pity: int, guarantee: bool,
-					remaining_gems: int) -> Array:
-	var pull = pull(banner_type, pity)
-	
-	if pull == "5-STAR":
-		pity = 0
-		remaining_gems += banner["OTHER"]["5-STAR_GEM_GAIN"]
-		if fifty_fifty(banner_type, guarantee):
-			guarantee = false
-			five_stars_pulled += 1
-		else:
-			guarantee = true
-	
-	else:
-		pity += 1
-	return [five_stars_pulled, pity, guarantee, remaining_gems]
-
-
-func simulate_pulls(available_pulls: int, available_currency: int, available_gems: int, simulation_runs: int,
-					desired_five_stars: int, character_pity: int, guarantee: bool, desired_five_star_weapons: int,
+func simulate_banner(available_pulls: int, available_currency: int, available_gems: int, simulation_runs: int,
+					desired_chars: int, character_pity: int, guarantee: bool, desired_weps: int,
 					weapon_pity: int, weapon_guarantee: bool) -> float:
-	var total_success = 0
+	var successful_runs = 0
 	
 	for i in range(simulation_runs):
-		var five_stars_pulled = 0
-		var weapons_pulled = 0
-		var remaining_pulls = available_pulls + (available_currency / 160)
-		
 		var remaining_gems = available_gems
+		var remaining_pulls = available_pulls
+		remaining_pulls += banner.currency_to_pulls(available_currency)
+		remaining_pulls += banner.gems_to_pulls(remaining_gems)
+		remaining_gems %= banner.gem_conversion_rate
 		
-		var pity = character_pity
+		var chars_pulled = 0
+		var weps_pulled = 0
+		var chars_4_star_pulled = 0
+		var weps_4_star_pulled = 0
+		
+		var char_pity = character_pity
 		var wep_pity = weapon_pity
-		var four_star_pity = 0
-		var wep_four_star_pity = 0
+		var char_4_star_pity = 0
+		var wep_4_star_pity = 0
 		
-		var current_guarantee = guarantee
+		var char_guarantee = guarantee
 		var wep_guarantee = weapon_guarantee
-		var four_star_guarantee = false
+		var char_4_star_guarantee = false
+		var wep_4_star_guarantee = false
 		
-		while remaining_pulls > 0 or remaining_gems >= banner["OTHER"]["GEM_CONVERSION_RATE"]:
-			if remaining_gems >= banner["OTHER"]["GEM_CONVERSION_RATE"]:
-				remaining_pulls += gem_conversion(banner["OTHER"]["GEM_CONVERSION_RATE"], remaining_gems)
-				remaining_gems %= banner["OTHER"]["GEM_CONVERSION_RATE"]
+		while (remaining_pulls > 0) or (remaining_gems >= banner.gem_conversion_rate):
 			remaining_pulls -= 1
 			
 			# Character banners
-			if five_stars_pulled < desired_five_stars:
+			if chars_pulled < desired_chars:
 				var result: Array = simulate_banner("CHARACTER", five_stars_pulled, pity, current_guarantee, remaining_gems)
 				five_stars_pulled = result[0]
 				pity = result[1]
 				current_guarantee = result[2]
 				remaining_gems = result[3]
 			# Weapon banners
-			if weapons_pulled < desired_five_star_weapons:
+			if weapons_pulled < desired_weps:
 				var result: Array = simulate_banner("WEAPON", weapons_pulled, wep_pity, wep_guarantee, remaining_gems)
 				weapons_pulled = result[0]
 				wep_pity = result[1]
@@ -122,10 +82,10 @@ func simulate_pulls(available_pulls: int, available_currency: int, available_gem
 				remaining_gems = result[3]
 		
 		if (five_stars_pulled >= desired_five_stars) and (weapons_pulled >= desired_five_star_weapons):
-			total_success += 1
+			successful_runs += 1
 
 	
-	return float(total_success) / float(simulation_runs)
+	return float(successful_runs) / float(simulation_runs)
 
 
 func _on_run_button_pressed() -> void:
