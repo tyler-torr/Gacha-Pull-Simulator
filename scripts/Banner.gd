@@ -1,3 +1,4 @@
+# Banner.gd
 extends Resource
 class_name Banner
 
@@ -32,6 +33,7 @@ func simulate_pull(banner_type: String, pity: int, four_star_pity: int) -> Strin
 	var chance: float
 	var four_star_chance: float = four_star_pull_rate
 	var roll: float = randf()
+	
 	match banner_type:
 		"CHARACTER":
 			chance = char_pull_rate

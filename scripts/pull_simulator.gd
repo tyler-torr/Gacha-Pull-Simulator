@@ -1,3 +1,4 @@
+# pull_simulator.gd
 extends Control
 
 
@@ -36,7 +37,7 @@ func ready() -> void:
 	banner = load("res://resources/HSRBanner.tres")
 
 
-func simulate_banner(available_pulls: int, available_currency: int, available_gems: int, simulation_runs: int,
+func calculate_average_success(available_pulls: int, available_currency: int, available_gems: int, simulation_runs: int,
 					desired_chars: int, character_pity: int, guarantee: bool, desired_weps: int,
 					weapon_pity: int, weapon_guarantee: bool) -> float:
 	var successful_runs = 0
@@ -68,13 +69,20 @@ func simulate_banner(available_pulls: int, available_currency: int, available_ge
 			
 			# Character banners
 			if chars_pulled < desired_chars:
-				var result: Array = simulate_banner("CHARACTER", five_stars_pulled, pity, current_guarantee, remaining_gems)
-				five_stars_pulled = result[0]
-				pity = result[1]
-				current_guarantee = result[2]
-				remaining_gems = result[3]
+				var pull = banner.simulate_pull("CHARACTER", char_pity, char_4_star_pity)
+				if pull == "5-STAR":
+					char_pity = 0
+					char_4_star_pity += 1
+					remaining_gems += banner.gem_5_star_gain
+					if banner.fifty_fifty("CHARACTER", char_guarantee):
+						char_guarantee = false
+						chars_pulled += 1
+					else:
+						char_guarantee = true
+				elif pull == "4-STAR":
+					char_pity += 1	
 			# Weapon banners
-			if weapons_pulled < desired_weps:
+			elif weapons_pulled < desired_weps:
 				var result: Array = simulate_banner("WEAPON", weapons_pulled, wep_pity, wep_guarantee, remaining_gems)
 				weapons_pulled = result[0]
 				wep_pity = result[1]
@@ -100,7 +108,7 @@ func _on_run_button_pressed() -> void:
 	var weapon_pity = int(weapon_pity_input.value)
 	var weapon_guarantee = weapon_guarantee_input.is_pressed()
 	
-	var average_success = simulate_pulls(available_pulls, available_currency, available_gems, simulation_runs,
+	var average_success = calculate_average_success(available_pulls, available_currency, available_gems, simulation_runs,
 										desired_five_stars, character_pity, guarantee, desired_five_star_weapons,
 										weapon_pity, weapon_guarantee)
 	
