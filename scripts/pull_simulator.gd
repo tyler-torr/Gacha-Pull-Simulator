@@ -53,9 +53,11 @@ func simulate_banner(banner_type: String, pity: int, four_star_pity: int, guaran
 				run.lose_fifty_fifty(banner_type)
 		"4-STAR":
 			run.char_pity += 1
+			pass
 		"_":
 			run.char_pity += 1
 			run.four_star_pity += 1
+			pass
 
 
 func calculate_average_success(desired_chars: int, desired_weps: int, simulation_runs: int) -> float:

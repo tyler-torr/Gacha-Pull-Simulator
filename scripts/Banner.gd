@@ -29,34 +29,34 @@ class_name Banner
 @export var gem_5_star_gain: int
 
 
+func calculate_chance(pity: int, pull_rate: float, hard_pity: int, soft_pity_start: int,
+		soft_pity_rate: float) -> float:
+	var chance = pull_rate
+	if pity >= hard_pity:
+		return 1.0
+	elif pity >= soft_pity_start:
+		var pity_step: int = pity - soft_pity_start + 1
+		return chance + (pity_step * soft_pity_rate)
+	else:
+		return chance
+
+
 func simulate_pull(banner_type: String, pity: int, four_star_pity: int) -> String:
 	var chance: float
 	var four_star_chance: float = four_star_pull_rate
-	var roll: float = randf()
+	var roll: float
 	
 	match banner_type:
 		"CHARACTER":
-			chance = char_pull_rate
-			if pity >= char_hard_pity:
-				chance = 1.0
-			elif pity >= char_soft_pity_start:
-				var pity_step: int = pity - char_soft_pity_start + 1
-				chance += pity_step * char_soft_pity_rate
+			chance = calculate_chance(pity, char_pull_rate, char_hard_pity, char_soft_pity_start, char_soft_pity_rate)
 			
 		"WEAPON":
-			chance = wep_pull_rate
-			if pity >= wep_hard_pity:
-				chance = 1.0
-			elif pity >= wep_soft_pity_start:
-				var pity_step: int = pity - wep_soft_pity_start + 1
-				chance += pity_step * wep_soft_pity_rate
+			chance = calculate_chance(pity, wep_pull_rate, wep_hard_pity, wep_soft_pity_start, wep_soft_pity_rate)
 	
-	if four_star_pity >= four_star_hard_pity:
-		four_star_chance = 1.0
-	elif four_star_pity >= four_star_soft_pity_start:
-		var four_star_pity_step = four_star_pity - four_star_soft_pity_start + 1
-		four_star_chance += four_star_pity_step * four_star_soft_pity_rate
+	four_star_chance = calculate_chance(four_star_pity, four_star_pull_rate, four_star_hard_pity,
+			four_star_soft_pity_start, four_star_soft_pity_rate)
 	
+	roll = randf()
 	if chance >= roll:
 		return "5-STAR"
 	elif four_star_chance >= roll:
