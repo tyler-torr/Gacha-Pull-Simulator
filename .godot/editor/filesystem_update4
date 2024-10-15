@@ -1,3 +1,4 @@
 res://scenes/pull_simulator.tscn
 res://scripts/pull_simulator.gd
 res://scripts/Banner.gd
+res://scripts/run_data.gd

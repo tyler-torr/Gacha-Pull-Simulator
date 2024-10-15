@@ -75,11 +75,3 @@ func fifty_fifty(pull_type: String, guarantee: bool) -> bool:
 		"4-STAR":
 			chance = four_star_fifty_fifty
 	return guarantee or chance >= randf()
-
-
-func currency_to_pulls(currency: int) -> int:
-	return currency / currency_conversion_rate
-
-
-func gems_to_pulls(gems: int) -> int:
-	return gems / gem_conversion_rate

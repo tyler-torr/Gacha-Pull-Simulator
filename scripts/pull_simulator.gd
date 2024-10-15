@@ -19,7 +19,8 @@ const WUWA_BANNER = {
 	}
 }
 
-var banner
+var banner: Banner
+var run: RunData
 
 @onready var available_pulls_input = $AvailablePullsInput
 @onready var available_currency_input = $AvailableCurrencyInput
@@ -33,84 +34,63 @@ var banner
 @onready var weapon_guarantee_input = $WeaponGuaranteeInput
 
 
+# Called when the node enters the scene tree for the first time.
 func ready() -> void:
 	banner = load("res://resources/HSRBanner.tres")
+	run = RunData.new()
 
 
-func calculate_average_success(available_pulls: int, available_currency: int, available_gems: int, simulation_runs: int,
-					desired_chars: int, character_pity: int, guarantee: bool, desired_weps: int,
-					weapon_pity: int, weapon_guarantee: bool) -> float:
+func simulate_banner(banner_type: String, pity: int, four_star_pity: int, guarantee: bool) -> void:
+	var pull = banner.simulate_pull(banner_type, pity, four_star_pity)
+	match banner_type:
+		"5-STAR":
+			run.char_pity = 0
+			run.char_4_star_pity += 1
+			run.remaining_gems += banner.gem_5_star_gain
+			if banner.fifty_fifty(banner_type, guarantee):
+				run.win_fifty_fifty(banner_type)
+			else:
+				run.lose_fifty_fifty(banner_type)
+		"4-STAR":
+			run.char_pity += 1
+		"_":
+			run.char_pity += 1
+			run.four_star_pity += 1
+
+
+func calculate_average_success(desired_chars: int, desired_weps: int, simulation_runs: int) -> float:
 	var successful_runs = 0
 	
 	for i in range(simulation_runs):
-		var remaining_gems = available_gems
-		var remaining_pulls = available_pulls
-		remaining_pulls += banner.currency_to_pulls(available_currency)
-		remaining_pulls += banner.gems_to_pulls(remaining_gems)
-		remaining_gems %= banner.gem_conversion_rate
+		run.reset(banner)
 		
-		var chars_pulled = 0
-		var weps_pulled = 0
-		var chars_4_star_pulled = 0
-		var weps_4_star_pulled = 0
-		
-		var char_pity = character_pity
-		var wep_pity = weapon_pity
-		var char_4_star_pity = 0
-		var wep_4_star_pity = 0
-		
-		var char_guarantee = guarantee
-		var wep_guarantee = weapon_guarantee
-		var char_4_star_guarantee = false
-		var wep_4_star_guarantee = false
-		
-		while (remaining_pulls > 0) or (remaining_gems >= banner.gem_conversion_rate):
-			remaining_pulls -= 1
+		while run.remaining_pulls > 0:
+			run.remaining_pulls -= 1
 			
 			# Character banners
-			if chars_pulled < desired_chars:
-				var pull = banner.simulate_pull("CHARACTER", char_pity, char_4_star_pity)
-				if pull == "5-STAR":
-					char_pity = 0
-					char_4_star_pity += 1
-					remaining_gems += banner.gem_5_star_gain
-					if banner.fifty_fifty("CHARACTER", char_guarantee):
-						char_guarantee = false
-						chars_pulled += 1
-					else:
-						char_guarantee = true
-				elif pull == "4-STAR":
-					char_pity += 1	
-			# Weapon banners
-			elif weapons_pulled < desired_weps:
-				var result: Array = simulate_banner("WEAPON", weapons_pulled, wep_pity, wep_guarantee, remaining_gems)
-				weapons_pulled = result[0]
-				wep_pity = result[1]
-				wep_guarantee = result[2]
-				remaining_gems = result[3]
+			if run.chars_pulled < desired_chars:
+				pass
 		
-		if (five_stars_pulled >= desired_five_stars) and (weapons_pulled >= desired_five_star_weapons):
+		if (run.chars_pulled >= desired_chars) and (run.weps_pulled >= desired_weps):
 			successful_runs += 1
-
 	
 	return float(successful_runs) / float(simulation_runs)
 
 
 func _on_run_button_pressed() -> void:
-	var available_pulls = int(available_pulls_input.value)
-	var available_currency = int(available_currency_input.value)
-	var available_gems = int(available_gems_input.value)
-	var simulation_runs = int(simulation_runs_input.value)
-	var desired_five_stars = int(desired_five_stars_input.value)
-	var character_pity = int(character_pity_input.value)
-	var guarantee = guarantee_input.is_pressed()
-	var desired_five_star_weapons = int(desired_five_star_weapons_input.value)
-	var weapon_pity = int(weapon_pity_input.value)
-	var weapon_guarantee = weapon_guarantee_input.is_pressed()
+	run.remaining_pulls = int(available_pulls_input.value)
+	run.remaining_currency = int(available_currency_input.value)
+	run.remaining_gems = int(available_gems_input.value)
+	run.char_pity = int(character_pity_input.value)
+	run.wep_pity = int(weapon_pity_input.value)
+	run.char_guarantee = guarantee_input.is_pressed()
+	run.wep_guarantee = weapon_guarantee_input.is_pressed()
 	
-	var average_success = calculate_average_success(available_pulls, available_currency, available_gems, simulation_runs,
-										desired_five_stars, character_pity, guarantee, desired_five_star_weapons,
-										weapon_pity, weapon_guarantee)
+	var desired_chars = int(desired_five_stars_input.value)
+	var desired_weps = int(desired_five_star_weapons_input.value)
+	var simulation_runs = int(simulation_runs_input.value)
+	
+	var average_success = calculate_average_success(desired_chars, desired_weps, simulation_runs)
 	
 	$ResultLabel.text = "Success Rate: " + str(average_success * 100) + "%"
 
