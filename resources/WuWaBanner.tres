@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Banner" load_steps=2 format=3 uid="uid://8h0kx7wg7fw4"]
+
+[ext_resource type="Script" path="res://scripts/Banner.gd" id="1_ywnrj"]
+
+[resource]
+script = ExtResource("1_ywnrj")
+char_pull_rate = 0.008
+char_soft_pity_start = 66
+char_soft_pity_rate = 0.08
+char_hard_pity = 80
+char_fifty_fifty = 0.5
+wep_pull_rate = 0.008
+wep_soft_pity_start = 0
+wep_soft_pity_rate = 66.0
+wep_hard_pity = 80
+wep_fifty_fifty = 1.0
+four_star_pull_rate = 0.0
+four_star_soft_pity_start = 0
+four_star_soft_pity_rate = 0.0
+four_star_hard_pity = 0
+four_star_fifty_fifty = 0.0
+currency_conversion_rate = 0
+gem_conversion_rate = 0
+gem_4_star_gain = 0
+gem_4_star_excess_gain = 0
+gem_5_star_gain = 0
