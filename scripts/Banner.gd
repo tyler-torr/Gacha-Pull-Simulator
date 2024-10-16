@@ -3,6 +3,18 @@ extends Resource
 class_name Banner
 
 
+enum PullType { 
+	CHARACTER, 
+	WEAPON 
+}
+enum Rarity { FIVE_STAR, 
+	FOUR_STAR, 
+	THREE_STAR 
+}
+
+const GUARANTEED_CHANCE = 1.0
+const FIFTY_FIFTY_CHANCE = 0.5
+
 @export_group("5-Star Characters")
 @export_range(0.0, 1.0) var char_pull_rate: float
 @export var char_soft_pity_start: int
@@ -37,7 +49,7 @@ func calculate_chance(pity: int, pull_rate: float, hard_pity: int, soft_pity_sta
 		soft_pity_rate: float) -> float:
 	var chance = pull_rate
 	if pity >= hard_pity: # Reached hard pity, chance is guaranteed
-		chance = 1.0
+		chance = GUARANTEED_CHANCE
 	elif pity >= soft_pity_start: # Reached soft pity (But not hard pity yet), chance is rising
 		var pity_step: int = pity - soft_pity_start + 1
 		chance += pity_step * soft_pity_rate
@@ -45,48 +57,52 @@ func calculate_chance(pity: int, pull_rate: float, hard_pity: int, soft_pity_sta
 
 
 # Roll to see if you get a 5* or 4* (Get a 3* if you miss)
-func roll_rarity(five_star_odds: float, four_star_odds: float) -> String:
+func roll_rarity(five_star_odds: float, four_star_odds: float) -> Rarity:
 	var roll = randf()
 	if roll <= five_star_odds:
-		return "5-STAR"
-	elif roll <= four_star_odds:
-		return "4-STAR"
+		return Rarity.FIVE_STAR
+	elif roll <= (four_star_odds + five_star_odds):
+		return Rarity.FOUR_STAR
 	else:
-		return "3-STAR"
+		return Rarity.THREE_STAR
 
 
 # Roll to see if you get a character or a weapon. Used for finding out how many gems are gained
 # (Assuming you have max copies of all characters, you get more gems for characters)
-func roll_type() -> String:
+func roll_type() -> PullType:
 	var roll = randf() # Assuming there are an equal amount of characters and weapons in a game
-	if roll <= 0.5:
-		return "CHARACTER"
+	if roll <= FIFTY_FIFTY_CHANCE:
+		return PullType.CHARACTER
 	else:
-		return "WEAPON"
+		return PullType.WEAPON
 
 
 # Based on banner type, calculate odds of getting a 4* and 5*, then see what you get from a pull
-func simulate_pull(banner_type: String, pity: int, four_star_pity: int) -> String:
+func simulate_pull(pull_type: PullType, pity: int, four_star_pity: int) -> String:
 	var chance: float
 	var four_star_chance: float = calculate_chance(four_star_pity, four_star_pull_rate, four_star_hard_pity,
 			four_star_soft_pity_start, four_star_soft_pity_rate)
-	match banner_type:
-		"CHARACTER":
+	match pull_type:
+		PullType.CHARACTER:
 			chance = calculate_chance(pity, char_pull_rate, char_hard_pity, char_soft_pity_start, char_soft_pity_rate)
-		"WEAPON":
+		PullType.WEAPON:
 			chance = calculate_chance(pity, wep_pull_rate, wep_hard_pity, wep_soft_pity_start, wep_soft_pity_rate)
 	return roll_rarity(chance, four_star_chance)
 
 
 # If a 4* or 5* is pulled, check whether they win the 50/50. If guarantee = true, 50/50 automatically wins
-func fifty_fifty(pull_type: String, rarity: String, guarantee: bool) -> bool:
+func fifty_fifty(pull_type: PullType, rarity: Rarity, guarantee: bool) -> bool:
+	if guarantee:
+		return true
+	
 	var chance: float
 	match rarity:
-		"5-STAR":
-			if pull_type == "CHARACTER":
-				chance = char_fifty_fifty
-			elif pull_type == "WEAPON":
-				chance = wep_fifty_fifty
-		"4-STAR":
+		Rarity.FIVE_STAR:
+			match pull_type:
+				PullType.CHARACTER:
+					chance = char_fifty_fifty
+				PullType.WEAPON:
+					chance = wep_fifty_fifty
+		Rarity.FOUR_STAR:
 			chance = four_star_fifty_fifty
-	return guarantee or chance >= randf()
+	return chance >= randf()
