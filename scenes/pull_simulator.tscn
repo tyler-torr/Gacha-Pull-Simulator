@@ -99,6 +99,7 @@ offset_top = 132.0
 offset_right = 135.063
 offset_bottom = 163.0
 max_value = 100000.0
+value = 100.0
 
 [node name="AvailableCurrencyInput" type="SpinBox" parent="."]
 layout_mode = 0
@@ -122,8 +123,8 @@ offset_left = 433.0
 offset_top = 132.0
 offset_right = 516.063
 offset_bottom = 163.0
-max_value = 100000.0
-value = 10000.0
+max_value = 99999.0
+value = 1000.0
 
 [node name="FiveStarCharacterInput" type="SpinBox" parent="."]
 layout_mode = 0
@@ -132,6 +133,7 @@ offset_top = 271.0
 offset_right = 135.063
 offset_bottom = 302.0
 max_value = 100000.0
+value = 1.0
 
 [node name="CharacterPityInput" type="SpinBox" parent="."]
 layout_mode = 0

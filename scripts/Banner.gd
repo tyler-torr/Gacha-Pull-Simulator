@@ -34,12 +34,11 @@ func calculate_chance(pity: int, pull_rate: float, hard_pity: int, soft_pity_sta
 		soft_pity_rate: float) -> float:
 	var chance = pull_rate
 	if pity >= hard_pity: # Reached hard pity, chance is guaranteed
-		return 1.0
+		chance = 1.0
 	elif pity >= soft_pity_start: # Reached soft pity (But not hard pity yet), chance is rising
 		var pity_step: int = pity - soft_pity_start + 1
-		return chance + (pity_step * soft_pity_rate)
-	else: # Base chance
-		return chance
+		chance += pity_step * soft_pity_rate
+	return chance
 
 
 # Roll to see if you get a 5* or 4* (Get a 3* if you miss)
@@ -66,17 +65,13 @@ func roll_type() -> String:
 # Based on banner type, calculate odds of getting a 4* and 5*, then see what you get from a pull
 func simulate_pull(banner_type: String, pity: int, four_star_pity: int) -> String:
 	var chance: float
-	var four_star_chance: float
-	
+	var four_star_chance: float = calculate_chance(four_star_pity, four_star_pull_rate, four_star_hard_pity,
+			four_star_soft_pity_start, four_star_soft_pity_rate)
 	match banner_type:
 		"CHARACTER":
 			chance = calculate_chance(pity, char_pull_rate, char_hard_pity, char_soft_pity_start, char_soft_pity_rate)
 		"WEAPON":
 			chance = calculate_chance(pity, wep_pull_rate, wep_hard_pity, wep_soft_pity_start, wep_soft_pity_rate)
-	
-	four_star_chance = calculate_chance(four_star_pity, four_star_pull_rate, four_star_hard_pity,
-			four_star_soft_pity_start, four_star_soft_pity_rate)
-	
 	return roll_rarity(chance, four_star_chance)
 
 

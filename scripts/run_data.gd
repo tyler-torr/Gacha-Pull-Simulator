@@ -34,14 +34,14 @@ func _init(in_remaining_pulls: int = 0, in_remaining_gems: int = 0, in_remaining
 	self.remaining_currency = in_remaining_currency
 	self.remaining_gems = in_remaining_gems
 	self.char_pity = in_char_pity
-	self.weps_pity = in_wep_pity
+	self.wep_pity = in_wep_pity
 	self.char_guarantee = in_char_guarantee
 	self.wep_guarantee = in_wep_guarantee
 	
 	self.chars_pulled = 0
 	self.weps_pulled = 0
-	self.chars_four_star_pulled = 0
-	self.weps_four_star_pulled = 0
+	#self.chars_four_star_pulled = 0
+	#self.weps_four_star_pulled = 0
 	self.char_four_star_pity = 0
 	self.wep_four_star_pity = 0
 	self.char_four_star_guarantee = false
