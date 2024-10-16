@@ -3,26 +3,29 @@ extends Resource
 class_name Banner
 
 
-@export var char_pull_rate: float
+@export_group("5-Star Characters")
+@export_range(0.0, 1.0) var char_pull_rate: float
 @export var char_soft_pity_start: int
-@export var char_soft_pity_rate: float
+@export_range(0.0, 1.0) var char_soft_pity_rate: float
 @export var char_hard_pity: int
-@export var char_fifty_fifty: float # According to 棵平衡樹, HSR's character banner has 56.4% odds to win
+@export_range(0.0, 1.0) var char_fifty_fifty: float # According to 棵平衡樹, HSR's character banner has 56.4% odds to win
 
-@export var wep_pull_rate: float
+@export_group("5-Star Weapons")
+@export_range(0.0, 1.0) var wep_pull_rate: float
 @export var wep_soft_pity_start: int
-@export var wep_soft_pity_rate: float
+@export_range(0.0, 1.0) var wep_soft_pity_rate: float
 @export var wep_hard_pity: int
-@export var wep_fifty_fifty: float
+@export_range(0.0, 1.0) var wep_fifty_fifty: float
 
-@export var four_star_pull_rate: float
+@export_group("4-Star Info")
+@export_range(0.0, 1.0) var four_star_pull_rate: float
 @export var four_star_soft_pity_start: int
-@export var four_star_soft_pity_rate: float
+@export_range(0.0, 1.0) var four_star_soft_pity_rate: float
 @export var four_star_hard_pity: int
-@export var four_star_fifty_fifty: float
+@export_range(0.0, 1.0) var four_star_fifty_fifty: float
 
+@export_group("Currency & Gem Gain")
 @export var currency_conversion_rate: int
-
 @export var gem_conversion_rate: int
 @export var gem_4_star_gain: int
 @export var gem_4_star_excess_gain: int
@@ -85,5 +88,5 @@ func fifty_fifty(pull_type: String, rarity: String, guarantee: bool) -> bool:
 			elif pull_type == "WEAPON":
 				chance = wep_fifty_fifty
 		"4-STAR":
-			chance = wep_fifty_fifty
+			chance = four_star_fifty_fifty
 	return guarantee or chance >= randf()
