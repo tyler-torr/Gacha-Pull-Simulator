@@ -78,7 +78,7 @@ func roll_type() -> PullType:
 
 
 # Based on banner type, calculate odds of getting a 4* and 5*, then see what you get from a pull
-func simulate_pull(pull_type: PullType, pity: int, four_star_pity: int) -> String:
+func simulate_pull(pull_type: PullType, pity: int, four_star_pity: int) -> Rarity:
 	var chance: float
 	var four_star_chance: float = calculate_chance(four_star_pity, four_star_pull_rate, four_star_hard_pity,
 			four_star_soft_pity_start, four_star_soft_pity_rate)
