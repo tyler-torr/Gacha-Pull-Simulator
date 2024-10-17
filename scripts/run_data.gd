@@ -67,17 +67,17 @@ func reset(banner: Banner) -> void:
 	wep_four_star_guarantee = false
 	
 	# Convert currency and gems to pulls immediately on reset
-	currency_to_pulls(banner)
-	gems_to_pulls(banner)
+	_currency_to_pulls(banner)
+	_gems_to_pulls(banner)
 
 
 # Convert currency to pulls
-func currency_to_pulls(banner: Banner) -> void:
+func _currency_to_pulls(banner: Banner) -> void:
 	remaining_pulls += remaining_currency / banner.currency_conversion_rate # Excess currency not needed
 
 
 # Convert gems to pulls
-func gems_to_pulls(banner: Banner) -> void:
+func _gems_to_pulls(banner: Banner) -> void:
 	while remaining_gems >= banner.gem_conversion_rate:
 		remaining_gems -= banner.gem_conversion_rate
 		remaining_pulls += 1
@@ -86,36 +86,40 @@ func gems_to_pulls(banner: Banner) -> void:
 # Gain gems, then check if it's enough gems to convert into a pull
 func add_gems(banner: Banner, amount: int) -> void:
 	remaining_gems += amount
-	gems_to_pulls(banner)
+	_gems_to_pulls(banner)
 
 
 # Called when a 50/50 is won. Corresponding type is pulled, then guarantee is lost
-func win_fifty_fifty(banner_type: String, rarity: String) -> void:
-	match banner_type:
-		"CHARACTER":
-			if rarity == "5-STAR":
-				chars_pulled += 1
-				char_guarantee = false
-			elif rarity == "4-STAR":
-				char_four_star_guarantee = false
-		"WEAPON":
-			if rarity == "5-STAR":
-				weps_pulled += 1
-				wep_guarantee = false
-			elif rarity == "4-STAR":
-				wep_four_star_guarantee = false
+func win_fifty_fifty(pull_type: Banner.PullType, rarity: Banner.Rarity) -> void:
+	match pull_type:
+		Banner.PullType.CHARACTER:
+			match rarity:
+				Banner.Rarity.FIVE_STAR:
+					chars_pulled += 1
+					char_guarantee = false
+				Banner.Rarity.FOUR_STAR:
+					char_four_star_guarantee = false
+		Banner.PullType.WEAPON:
+			match rarity:
+				Banner.Rarity.FIVE_STAR:
+					weps_pulled += 1
+					wep_guarantee = false
+				Banner.Rarity.FOUR_STAR:
+					wep_four_star_guarantee = false
 
 
 # Called when a 50/50 is lost. Guarantee is now true
-func lose_fifty_fifty(banner_type: String, rarity: String) -> void:
-	match banner_type:
-		"CHARACTER":
-			if rarity == "5-STAR":
-				char_guarantee = true
-			elif rarity == "4-STAR":
-				char_four_star_guarantee = true
-		"WEAPON":
-			if rarity == "5-STAR":
-				wep_guarantee = true
-			elif rarity == "4-STAR":
-				wep_four_star_guarantee = true
+func lose_fifty_fifty(pull_type: Banner.PullType, rarity: Banner.Rarity) -> void:
+	match pull_type:
+		Banner.PullType.CHARACTER:
+			match rarity:
+				Banner.Rarity.FIVE_STAR:
+					char_guarantee = true
+				Banner.Rarity.FOUR_STAR:
+					char_four_star_guarantee = true
+		Banner.PullType.WEAPON:
+			match rarity:
+				Banner.Rarity.FIVE_STAR:
+					wep_guarantee = true
+				Banner.Rarity.FOUR_STAR:
+					wep_four_star_guarantee = true

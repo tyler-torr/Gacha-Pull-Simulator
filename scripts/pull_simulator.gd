@@ -22,54 +22,54 @@ func ready() -> void:
 	print("Initializing banner and run")
 
 
-func simulate_fifty_fifty(banner_type: String, rarity: String, guarantee: bool) -> void:
+func simulate_fifty_fifty(banner_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool) -> void:
 	match rarity:
-		"5-STAR":
+		Banner.Rarity.FIVE_STAR:
 			run.add_gems(banner, 40)
 			if banner.fifty_fifty(banner_type, rarity, guarantee): # Won 50/50
 				run.win_fifty_fifty(banner_type, rarity)
 			else: # Lost 50/50
 				run.lose_fifty_fifty(banner_type, rarity)
-		"4-STAR":
-			var type = banner_type
+		Banner.Rarity.FOUR_STAR:
+			var type: Banner.PullType = banner_type
 			if not banner.fifty_fifty(banner_type, rarity, guarantee): # If you lose 50/50, chance to get any 4*
 				type = banner.roll_type()
-			if type == "CHARACTER":
+			if type == Banner.PullType.CHARACTER:
 				run.add_gems(banner, 20)
-			elif type == "WEAPON":
+			elif type == Banner.PullType.WEAPON:
 				run.add_gems(banner, 8)
 
 
-func simulate_char_banner(banner_type: String, pity: int, four_star_pity: int, guarantee: bool, 
+func simulate_char_banner(banner_type: Banner.PullType, pity: int, four_star_pity: int, guarantee: bool, 
 		four_star_guarantee: bool) -> void:
-	var pull = banner.simulate_pull(banner_type, pity, four_star_pity)
+	var pull: Banner.Rarity = banner.simulate_pull(banner_type, pity, four_star_pity)
 	match pull:
-		"5-STAR":
+		Banner.Rarity.FIVE_STAR:
 			run.char_pity = 0 # Reset 5-star pity on pull
 			run.char_four_star_pity += 1
 			simulate_fifty_fifty(banner_type, pull, guarantee)
-		"4-STAR":
+		Banner.Rarity.FOUR_STAR:
 			run.char_pity += 1
 			run.char_four_star_pity = 0 # Reset 4-star pity on pull
 			simulate_fifty_fifty(banner_type, pull, guarantee)
-		"3-STAR":
+		Banner.Rarity.THREE_STAR:
 			run.char_pity += 1
 			run.char_four_star_pity += 1
 
 
-func simulate_wep_banner(banner_type: String, pity: int, four_star_pity: int, guarantee: bool, 
+func simulate_wep_banner(banner_type: Banner.PullType, pity: int, four_star_pity: int, guarantee: bool, 
 		four_star_guarantee: bool) -> void:
 	var pull = banner.simulate_pull(banner_type, pity, four_star_pity)
 	match pull:
-		"5-STAR":
+		Banner.Rarity.FIVE_STAR:
 			run.wep_pity = 0 # Reset 5-star pity on pull
 			run.wep_four_star_pity += 1
 			simulate_fifty_fifty(banner_type, pull, guarantee)
-		"4-STAR":
+		Banner.Rarity.FOUR_STAR:
 			run.wep_pity += 1
 			run.wep_four_star_pity = 0 # Reset 4-star pity on pull
 			simulate_fifty_fifty(banner_type, pull, guarantee)
-		"3-STAR":
+		Banner.Rarity.THREE_STAR:
 			run.wep_pity += 1
 			run.wep_four_star_pity += 1
 
@@ -84,11 +84,11 @@ func calculate_average_success(desired_chars: int, desired_weps: int, simulation
 			run.remaining_pulls -= 1
 			# Character banners
 			if run.chars_pulled < desired_chars:
-				simulate_char_banner("CHARACTER", run.char_pity, run.char_four_star_pity, run.char_guarantee, 
+				simulate_char_banner(Banner.PullType.CHARACTER, run.char_pity, run.char_four_star_pity, run.char_guarantee, 
 				run.char_four_star_guarantee)
 			# Weapon banners
 			elif run.weps_pulled < desired_weps:
-				simulate_wep_banner("WEAPON", run.wep_pity, run.wep_four_star_pity, run.wep_guarantee, 
+				simulate_wep_banner(Banner.PullType.WEAPON, run.wep_pity, run.wep_four_star_pity, run.wep_guarantee, 
 				run.wep_four_star_guarantee)
 		# Check if all wanted characters and weapons are pulled
 		if (run.chars_pulled >= desired_chars) and (run.weps_pulled >= desired_weps):
