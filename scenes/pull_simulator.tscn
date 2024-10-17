@@ -50,106 +50,108 @@ popup/item_0/text = "Assume E0"
 popup/item_1/text = "Assume E6"
 popup/item_1/id = 1
 
-[node name="RunContainer" type="HBoxContainer" parent="."]
+[node name="RunDataContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 offset_left = 28.0
 offset_top = 154.0
 offset_right = 65.0
 offset_bottom = 194.0
 
-[node name="PullsLabel" type="Label" parent="RunContainer"]
+[node name="PullsLabel" type="Label" parent="RunDataContainer"]
 layout_mode = 2
 text = "Pulls"
 
-[node name="PullsInput" type="SpinBox" parent="RunContainer"]
+[node name="PullsInput" type="SpinBox" parent="RunDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 value = 100.0
 
-[node name="CurrencyLabel" type="Label" parent="RunContainer"]
+[node name="CurrencyLabel" type="Label" parent="RunDataContainer"]
 layout_mode = 2
 text = "Stellar Jade"
 
-[node name="CurrencyInput" type="SpinBox" parent="RunContainer"]
+[node name="CurrencyInput" type="SpinBox" parent="RunDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="GemsLabel" type="Label" parent="RunContainer"]
+[node name="GemsLabel" type="Label" parent="RunDataContainer"]
 layout_mode = 2
 text = "Starlight"
 
-[node name="GemsInput" type="SpinBox" parent="RunContainer"]
+[node name="GemsInput" type="SpinBox" parent="RunDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="SimulationsLabel" type="Label" parent="RunContainer"]
+[node name="SimulationsLabel" type="Label" parent="RunDataContainer"]
 layout_mode = 2
 text = "Simulations"
 
-[node name="SimulationsInput" type="SpinBox" parent="RunContainer"]
+[node name="SimulationsInput" type="SpinBox" parent="RunDataContainer"]
 layout_mode = 2
 max_value = 99999.0
 value = 1000.0
 
-[node name="CharacterContainer" type="HBoxContainer" parent="."]
+[node name="CharacterDataContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 28.0
 offset_top = 234.0
 offset_right = 549.0
 offset_bottom = 274.0
 
-[node name="CharacterLabel" type="Label" parent="CharacterContainer"]
+[node name="CharacterLabel" type="Label" parent="CharacterDataContainer"]
 layout_mode = 2
 text = "Characters"
 
-[node name="CharacterInput" type="SpinBox" parent="CharacterContainer"]
+[node name="CharacterInput" type="SpinBox" parent="CharacterDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 value = 1.0
 
-[node name="CharacterPityLabel" type="Label" parent="CharacterContainer"]
+[node name="CharacterPityLabel" type="Label" parent="CharacterDataContainer"]
 layout_mode = 2
 text = "Character Pity"
 
-[node name="CharacterPityInput" type="SpinBox" parent="CharacterContainer"]
+[node name="CharacterPityInput" type="SpinBox" parent="CharacterDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="CharGuaranteeInput" type="CheckBox" parent="CharacterContainer"]
+[node name="CharGuaranteeInput" type="CheckBox" parent="CharacterDataContainer"]
 layout_mode = 2
 text = "Guarantee?"
 
-[node name="WeaponContainer" type="HBoxContainer" parent="."]
+[node name="WeaponDataContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_left = 28.0
 offset_top = 316.0
 offset_right = 549.0
 offset_bottom = 356.0
 
-[node name="WeaponLabel" type="Label" parent="WeaponContainer"]
+[node name="WeaponLabel" type="Label" parent="WeaponDataContainer"]
 layout_mode = 2
 text = "Weapons"
 
-[node name="WeaponInput" type="SpinBox" parent="WeaponContainer"]
+[node name="WeaponInput" type="SpinBox" parent="WeaponDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="WeaponPityLabel" type="Label" parent="WeaponContainer"]
+[node name="WeaponPityLabel" type="Label" parent="WeaponDataContainer"]
 layout_mode = 2
 text = "Weapon Pity"
 
-[node name="WeaponPityInput" type="SpinBox" parent="WeaponContainer"]
+[node name="WeaponPityInput" type="SpinBox" parent="WeaponDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="WepGuaranteeInput" type="CheckBox" parent="WeaponContainer"]
+[node name="WepGuaranteeInput" type="CheckBox" parent="WeaponDataContainer"]
 layout_mode = 2
-text = "Weapon Guarantee?"
+text = "Guarantee?"
 
-[node name="BoxContainer" type="BoxContainer" parent="."]
+[node name="VSplitContainer" type="VSplitContainer" parent="."]
 layout_mode = 0
-offset_right = 741.0
-offset_bottom = 457.0
+offset_left = 52.0
+offset_top = 455.0
+offset_right = 601.0
+offset_bottom = 542.0
 
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
 [connection signal="item_selected" from="BannersOption" to="." method="_on_option_button_item_selected"]

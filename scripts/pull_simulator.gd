@@ -5,16 +5,16 @@ extends Control
 var banner: Banner = load("res://resources/HSRBanner.tres")
 var run: RunData = RunData.new()
 
-@onready var available_pulls_input = $AvailablePullsInput
-@onready var available_currency_input = $AvailableCurrencyInput
-@onready var available_gems_input = $AvailableGemsInput
-@onready var simulation_runs_input = $SimulationRunsInput
-@onready var desired_five_stars_input = $FiveStarCharacterInput
-@onready var character_pity_input = $CharacterPityInput
-@onready var guarantee_input = $GuaranteeInput
-@onready var desired_five_star_weapons_input = $FiveStarWeaponInput
-@onready var weapon_pity_input = $WeaponPityInput
-@onready var weapon_guarantee_input = $WeaponGuaranteeInput
+@onready var available_pulls_input = $RunDataContainer/PullsInput
+@onready var available_currency_input = $RunDataContainer/CurrencyInput
+@onready var available_gems_input = $RunDataContainer/GemsInput
+@onready var simulation_runs_input = $RunDataContainer/SimulationsInput
+@onready var desired_five_stars_input = $CharacterDataContainer/CharacterInput
+@onready var character_pity_input = $CharacterDataContainer/CharacterPityInput
+@onready var guarantee_input = $CharacterDataContainer/CharGuaranteeInput
+@onready var desired_five_star_weapons_input = $WeaponDataContainer/WeaponInput
+@onready var weapon_pity_input = $WeaponDataContainer/WeaponPityInput
+@onready var weapon_guarantee_input = $WeaponDataContainer/WepGuaranteeInput
 
 
 # Called when the node enters the scene tree for the first time.
