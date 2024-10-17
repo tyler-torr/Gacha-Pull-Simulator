@@ -48,8 +48,8 @@ func _init(in_remaining_pulls: int = 0, in_remaining_gems: int = 0, in_remaining
 	self.wep_four_star_guarantee = false
 
 
-# Fully reset value of a simulation run. Use when starting a new run
-func reset(banner: Banner) -> void:
+# Fully clear values of a simulation run. Use when starting a new run
+func clear(banner: Banner) -> void:
 	remaining_pulls = 0
 	remaining_currency = 0
 	remaining_gems = 0

@@ -79,7 +79,7 @@ func simulate_wep_banner(banner_type: Banner.PullType, pity: int, four_star_pity
 func calculate_average_success(desired_chars: int, desired_weps: int, simulation_runs: int) -> float:
 	var successful_runs = 0
 	for i in range(simulation_runs):
-		reset_values()
+		reset()
 		while run.remaining_pulls > 0:
 			run.remaining_pulls -= 1
 			# Character banners
@@ -100,8 +100,8 @@ func calculate_average_success(desired_chars: int, desired_weps: int, simulation
 
 
 # Called at the start of each simulated run. Resets some values to ones specified by user
-func reset_values() -> void:
-	run.reset(banner)
+func reset() -> void:
+	run.clear(banner)
 	run.remaining_pulls = int(available_pulls_input.value)
 	run.remaining_currency = int(available_currency_input.value)
 	run.remaining_gems = int(available_gems_input.value)
