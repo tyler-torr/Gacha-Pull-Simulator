@@ -13,7 +13,7 @@ enum Rarity { FIVE_STAR,
 }
 
 const GUARANTEED_CHANCE = 1.0
-const FIFTY_FIFTY_CHANCE = 0.5
+const COIN_FLIP_CHANCE = 0.5
 
 @export_group("5-Star Characters")
 @export_range(0.0, 1.0) var char_pull_rate: float
@@ -71,7 +71,7 @@ func roll_rarity(five_star_odds: float, four_star_odds: float) -> Rarity:
 # (Assuming you have max copies of all characters, you get more gems for characters)
 func roll_type() -> PullType:
 	var roll = randf() # Assuming there are an equal amount of characters and weapons in a game
-	if roll <= FIFTY_FIFTY_CHANCE:
+	if roll <= COIN_FLIP_CHANCE:
 		return PullType.CHARACTER
 	else:
 		return PullType.WEAPON
@@ -94,7 +94,6 @@ func simulate_pull(pull_type: PullType, pity: int, four_star_pity: int) -> Rarit
 func fifty_fifty(pull_type: PullType, rarity: Rarity, guarantee: bool) -> bool:
 	if guarantee:
 		return true
-	
 	var chance: float
 	match rarity:
 		Rarity.FIVE_STAR:

@@ -1,10 +1,10 @@
+CheckBox
 Label
 VSplitContainer
 BoxContainer
 TabContainer
 HBoxContainer
 OptionButton
-CheckBox
 SpinBox
 Button
 LineEdit

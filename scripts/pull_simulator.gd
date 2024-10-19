@@ -22,6 +22,7 @@ func ready() -> void:
 	print("Initializing banner and run")
 
 
+# Test if a pull wins a 50/50. Change values of run data accordingly
 func simulate_fifty_fifty(banner_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool) -> void:
 	match rarity:
 		Banner.Rarity.FIVE_STAR:
@@ -40,38 +41,46 @@ func simulate_fifty_fifty(banner_type: Banner.PullType, rarity: Banner.Rarity, g
 				run.add_gems(banner, 8)
 
 
-func simulate_char_banner(banner_type: Banner.PullType, pity: int, four_star_pity: int, guarantee: bool, 
+func character_banner(banner_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool, 
 		four_star_guarantee: bool) -> void:
-	var pull: Banner.Rarity = banner.simulate_pull(banner_type, pity, four_star_pity)
-	match pull:
+	match rarity:
 		Banner.Rarity.FIVE_STAR:
 			run.char_pity = 0 # Reset 5-star pity on pull
 			run.char_four_star_pity += 1
-			simulate_fifty_fifty(banner_type, pull, guarantee)
+			simulate_fifty_fifty(banner_type, rarity, guarantee)
 		Banner.Rarity.FOUR_STAR:
 			run.char_pity += 1
 			run.char_four_star_pity = 0 # Reset 4-star pity on pull
-			simulate_fifty_fifty(banner_type, pull, guarantee)
+			simulate_fifty_fifty(banner_type, rarity, four_star_guarantee)
 		Banner.Rarity.THREE_STAR:
 			run.char_pity += 1
 			run.char_four_star_pity += 1
 
 
-func simulate_wep_banner(banner_type: Banner.PullType, pity: int, four_star_pity: int, guarantee: bool, 
+func weapon_banner(banner_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool, 
 		four_star_guarantee: bool) -> void:
-	var pull = banner.simulate_pull(banner_type, pity, four_star_pity)
-	match pull:
+	match rarity:
 		Banner.Rarity.FIVE_STAR:
 			run.wep_pity = 0 # Reset 5-star pity on pull
 			run.wep_four_star_pity += 1
-			simulate_fifty_fifty(banner_type, pull, guarantee)
+			simulate_fifty_fifty(banner_type, rarity, guarantee)
 		Banner.Rarity.FOUR_STAR:
 			run.wep_pity += 1
 			run.wep_four_star_pity = 0 # Reset 4-star pity on pull
-			simulate_fifty_fifty(banner_type, pull, guarantee)
+			simulate_fifty_fifty(banner_type, rarity, four_star_guarantee)
 		Banner.Rarity.THREE_STAR:
 			run.wep_pity += 1
 			run.wep_four_star_pity += 1
+
+
+func simulate_banner(banner_type: Banner.PullType, pity: int, four_star_pity: int, guarantee: bool, 
+		four_star_guarantee: bool) -> void:
+	var pull = banner.simulate_pull(banner_type, pity, four_star_pity)
+	match banner_type:
+		Banner.PullType.CHARACTER:
+			character_banner(banner_type, pull, guarantee, four_star_guarantee)
+		Banner.PullType.WEAPON:
+			weapon_banner(banner_type, pull, guarantee, four_star_guarantee)
 
 
 # Run x number of simulations (default 10000). In each simulation, roll down to 0 pulls and see if the run managed
@@ -79,17 +88,18 @@ func simulate_wep_banner(banner_type: Banner.PullType, pity: int, four_star_pity
 func calculate_average_success(desired_chars: int, desired_weps: int, simulation_runs: int) -> float:
 	var successful_runs = 0
 	for i in range(simulation_runs):
-		reset()
+		reset_run()
 		while run.remaining_pulls > 0:
 			run.remaining_pulls -= 1
 			# Character banners
 			if run.chars_pulled < desired_chars:
-				simulate_char_banner(Banner.PullType.CHARACTER, run.char_pity, run.char_four_star_pity, run.char_guarantee, 
-				run.char_four_star_guarantee)
+				simulate_banner(Banner.PullType.CHARACTER, run.char_pity, run.char_four_star_pity, 
+						run.char_guarantee, run.char_four_star_guarantee)
 			# Weapon banners
 			elif run.weps_pulled < desired_weps:
-				simulate_wep_banner(Banner.PullType.WEAPON, run.wep_pity, run.wep_four_star_pity, run.wep_guarantee, 
-				run.wep_four_star_guarantee)
+				simulate_banner(Banner.PullType.WEAPON, run.wep_pity, run.wep_four_star_pity, 
+						run.wep_guarantee, run.wep_four_star_guarantee)
+		
 		# Check if all wanted characters and weapons are pulled
 		if (run.chars_pulled >= desired_chars) and (run.weps_pulled >= desired_weps):
 			successful_runs += 1
@@ -100,7 +110,7 @@ func calculate_average_success(desired_chars: int, desired_weps: int, simulation
 
 
 # Called at the start of each simulated run. Resets some values to ones specified by user
-func reset() -> void:
+func reset_run() -> void:
 	run.clear(banner)
 	run.remaining_pulls = int(available_pulls_input.value)
 	run.remaining_currency = int(available_currency_input.value)

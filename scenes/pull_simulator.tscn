@@ -89,7 +89,7 @@ text = "Simulations"
 [node name="SimulationsInput" type="SpinBox" parent="RunDataContainer"]
 layout_mode = 2
 max_value = 99999.0
-value = 1000.0
+value = 5000.0
 
 [node name="CharacterDataContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -145,13 +145,6 @@ max_value = 100000.0
 [node name="WepGuaranteeInput" type="CheckBox" parent="WeaponDataContainer"]
 layout_mode = 2
 text = "Guarantee?"
-
-[node name="VSplitContainer" type="VSplitContainer" parent="."]
-layout_mode = 0
-offset_left = 52.0
-offset_top = 455.0
-offset_right = 601.0
-offset_bottom = 542.0
 
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
 [connection signal="item_selected" from="BannersOption" to="." method="_on_option_button_item_selected"]
