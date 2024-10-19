@@ -1,5 +1,2 @@
 res://scenes/pull_simulator.tscn
 res://scripts/pull_simulator.gd
-res://resources/HSRBanner.tres
-res://scripts/Banner.gd
-res://resources/WuWaBanner.tres

@@ -2,38 +2,48 @@
 extends Control
 
 
-var banner: Banner = load("res://resources/HSRBanner.tres")
-var run: RunData = RunData.new()
+var HSR_BANNER: Banner
+var WUWA_BANNER: Banner
+#var ZZZ_BANNER: Banner
+var banner: Banner
+var run: RunData
 
-@onready var available_pulls_input = $RunDataContainer/PullsInput
-@onready var available_currency_input = $RunDataContainer/CurrencyInput
-@onready var available_gems_input = $RunDataContainer/GemsInput
-@onready var simulation_runs_input = $RunDataContainer/SimulationsInput
-@onready var desired_five_stars_input = $CharacterDataContainer/CharacterInput
-@onready var character_pity_input = $CharacterDataContainer/CharacterPityInput
-@onready var guarantee_input = $CharacterDataContainer/CharGuaranteeInput
-@onready var desired_five_star_weapons_input = $WeaponDataContainer/WeaponInput
-@onready var weapon_pity_input = $WeaponDataContainer/WeaponPityInput
-@onready var weapon_guarantee_input = $WeaponDataContainer/WepGuaranteeInput
+@onready var banner_input = $MarginContainer/HBoxContainer/VBoxContainer/BannerTabBar
+@onready var available_pulls_input = $MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer/PullsInput
+@onready var available_currency_input = $MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer/CurrencyInput
+@onready var available_gems_input = $MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer/GemsInput
+@onready var simulation_runs_input = $MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer/SimulationsInput
+@onready var desired_characters_input = $MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer/CharacterInput
+@onready var character_pity_input = $MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer/CharacterPityInput
+@onready var character_guarantee_input = $MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer/CharGuaranteeInput
+@onready var desired_weapons_input = $MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer/WeaponInput
+@onready var weapon_pity_input = $MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer/WeaponPityInput
+@onready var weapon_guarantee_input = $MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer/WepGuaranteeInput
 
 
 # Called when the node enters the scene tree for the first time.
-func ready() -> void:
+func _ready() -> void:
+	HSR_BANNER = load("res://resources/HSRBanner.tres")
+	WUWA_BANNER = load("res://resources/WuWaBanner.tres")
+	run = RunData.new()
+	
+	banner_input.set_current_tab(0)
+	
 	print("Initializing banner and run")
 
 
 # Test if a pull wins a 50/50. Change values of run data accordingly
-func simulate_fifty_fifty(banner_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool) -> void:
+func simulate_fifty_fifty(pull_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool) -> void:
 	match rarity:
-		Banner.Rarity.FIVE_STAR:
+		banner.Rarity.FIVE_STAR:
 			run.add_gems(banner, 40)
-			if banner.fifty_fifty(banner_type, rarity, guarantee): # Won 50/50
-				run.win_fifty_fifty(banner_type, rarity)
+			if banner.fifty_fifty(pull_type, rarity, guarantee): # Won 50/50
+				run.win_fifty_fifty(pull_type, rarity)
 			else: # Lost 50/50
-				run.lose_fifty_fifty(banner_type, rarity)
-		Banner.Rarity.FOUR_STAR:
-			var type: Banner.PullType = banner_type
-			if not banner.fifty_fifty(banner_type, rarity, guarantee): # If you lose 50/50, chance to get any 4*
+				run.lose_fifty_fifty(pull_type, rarity)
+		banner.Rarity.FOUR_STAR:
+			var type: Banner.PullType = pull_type
+			if not banner.fifty_fifty(pull_type, rarity, guarantee): # If you lose 50/50, chance to get any 4*
 				type = banner.roll_type()
 			if type == Banner.PullType.CHARACTER:
 				run.add_gems(banner, 20)
@@ -41,46 +51,46 @@ func simulate_fifty_fifty(banner_type: Banner.PullType, rarity: Banner.Rarity, g
 				run.add_gems(banner, 8)
 
 
-func character_banner(banner_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool, 
+func character_banner(pull_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool, 
 		four_star_guarantee: bool) -> void:
 	match rarity:
 		Banner.Rarity.FIVE_STAR:
 			run.char_pity = 0 # Reset 5-star pity on pull
 			run.char_four_star_pity += 1
-			simulate_fifty_fifty(banner_type, rarity, guarantee)
+			simulate_fifty_fifty(pull_type, rarity, guarantee)
 		Banner.Rarity.FOUR_STAR:
 			run.char_pity += 1
 			run.char_four_star_pity = 0 # Reset 4-star pity on pull
-			simulate_fifty_fifty(banner_type, rarity, four_star_guarantee)
+			simulate_fifty_fifty(pull_type, rarity, four_star_guarantee)
 		Banner.Rarity.THREE_STAR:
 			run.char_pity += 1
 			run.char_four_star_pity += 1
 
 
-func weapon_banner(banner_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool, 
+func weapon_banner(pull_type: Banner.PullType, rarity: Banner.Rarity, guarantee: bool, 
 		four_star_guarantee: bool) -> void:
 	match rarity:
 		Banner.Rarity.FIVE_STAR:
 			run.wep_pity = 0 # Reset 5-star pity on pull
 			run.wep_four_star_pity += 1
-			simulate_fifty_fifty(banner_type, rarity, guarantee)
+			simulate_fifty_fifty(pull_type, rarity, guarantee)
 		Banner.Rarity.FOUR_STAR:
 			run.wep_pity += 1
 			run.wep_four_star_pity = 0 # Reset 4-star pity on pull
-			simulate_fifty_fifty(banner_type, rarity, four_star_guarantee)
+			simulate_fifty_fifty(pull_type, rarity, four_star_guarantee)
 		Banner.Rarity.THREE_STAR:
 			run.wep_pity += 1
 			run.wep_four_star_pity += 1
 
 
-func simulate_banner(banner_type: Banner.PullType, pity: int, four_star_pity: int, guarantee: bool, 
+func simulate_banner(pull_type: Banner.PullType, pity: int, four_star_pity: int, guarantee: bool, 
 		four_star_guarantee: bool) -> void:
-	var pull = banner.simulate_pull(banner_type, pity, four_star_pity)
-	match banner_type:
+	var pull = banner.simulate_pull(pull_type, pity, four_star_pity)
+	match pull_type:
 		Banner.PullType.CHARACTER:
-			character_banner(banner_type, pull, guarantee, four_star_guarantee)
+			character_banner(pull_type, pull, guarantee, four_star_guarantee)
 		Banner.PullType.WEAPON:
-			weapon_banner(banner_type, pull, guarantee, four_star_guarantee)
+			weapon_banner(pull_type, pull, guarantee, four_star_guarantee)
 
 
 # Run x number of simulations (default 10000). In each simulation, roll down to 0 pulls and see if the run managed
@@ -99,10 +109,10 @@ func calculate_average_success(desired_chars: int, desired_weps: int, simulation
 			elif run.weps_pulled < desired_weps:
 				simulate_banner(Banner.PullType.WEAPON, run.wep_pity, run.wep_four_star_pity, 
 						run.wep_guarantee, run.wep_four_star_guarantee)
-		
-		# Check if all wanted characters and weapons are pulled
-		if (run.chars_pulled >= desired_chars) and (run.weps_pulled >= desired_weps):
-			successful_runs += 1
+			# Check if all wanted characters and weapons are pulled
+			elif (run.chars_pulled >= desired_chars) and (run.weps_pulled >= desired_weps):
+				successful_runs += 1
+				break
 	
 	var average_success: float = float(successful_runs) / float(simulation_runs)
 	print("Total average success across simulations: ", average_success)
@@ -117,13 +127,13 @@ func reset_run() -> void:
 	run.remaining_gems = int(available_gems_input.value)
 	run.char_pity = int(character_pity_input.value)
 	run.wep_pity = int(weapon_pity_input.value)
-	run.char_guarantee = guarantee_input.is_pressed()
+	run.char_guarantee = character_guarantee_input.is_pressed()
 	run.wep_guarantee = weapon_guarantee_input.is_pressed()
 
 
 func _on_run_button_pressed() -> void:
-	var desired_chars = int(desired_five_stars_input.value)
-	var desired_weps = int(desired_five_star_weapons_input.value)
+	var desired_chars = int(desired_characters_input.value)
+	var desired_weps = int(desired_weapons_input.value)
 	var simulation_runs = int(simulation_runs_input.value)
 	
 	var average_success = calculate_average_success(desired_chars, desired_weps, simulation_runs)
@@ -131,9 +141,12 @@ func _on_run_button_pressed() -> void:
 	$ResultLabel.text = "Success Rate: " + str(average_success * 100) + "%"
 
 
-func _on_option_button_item_selected(index: int) -> void:
-	#if index == 0:
-		#banner = HSR_BANNER
-	#elif index == 1:
-		#banner = WUWA_BANNER
-	pass
+# Change which banner resource is used based on the tab selected
+func _on_banner_tab_bar_tab_selected(tab: int) -> void:
+	match tab:
+		0:
+			banner = HSR_BANNER
+		1:
+			banner = WUWA_BANNER
+		#2:
+			#banner = ZZZ_BANNER

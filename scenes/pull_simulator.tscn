@@ -28,124 +28,123 @@ offset_bottom = 234.0
 text = "Run Simulation
 "
 
-[node name="BannersOption" type="OptionButton" parent="."]
-layout_mode = 0
-offset_left = 52.0
-offset_top = 31.0
-offset_right = 84.0
-offset_bottom = 51.0
-item_count = 2
-popup/item_0/text = "Honkai Star Rail"
-popup/item_1/text = "Wuthering Waves"
-popup/item_1/id = 1
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -76.5
+offset_right = 722.0
+offset_bottom = 76.5
+grow_vertical = 2
 
-[node name="CopiesButton" type="OptionButton" parent="."]
-layout_mode = 0
-offset_left = 317.0
-offset_top = 31.0
-offset_right = 433.0
-offset_bottom = 62.0
-item_count = 2
-popup/item_0/text = "Assume E0"
-popup/item_1/text = "Assume E6"
-popup/item_1/id = 1
-
-[node name="RunDataContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-offset_left = 28.0
-offset_top = 154.0
-offset_right = 65.0
-offset_bottom = 194.0
 
-[node name="PullsLabel" type="Label" parent="RunDataContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="BannerTabBar" type="TabBar" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+current_tab = 0
+tab_count = 3
+tab_0/title = "Honkai Star Rail"
+tab_1/title = "Wuthering Waves"
+tab_2/title = "Zenless Zone Zero"
+
+[node name="RunDataContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="PullsLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 text = "Pulls"
 
-[node name="PullsInput" type="SpinBox" parent="RunDataContainer"]
+[node name="PullsInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 value = 100.0
 
-[node name="CurrencyLabel" type="Label" parent="RunDataContainer"]
+[node name="CurrencyLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 text = "Stellar Jade"
 
-[node name="CurrencyInput" type="SpinBox" parent="RunDataContainer"]
+[node name="CurrencyInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="GemsLabel" type="Label" parent="RunDataContainer"]
+[node name="GemsLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 text = "Starlight"
 
-[node name="GemsInput" type="SpinBox" parent="RunDataContainer"]
+[node name="GemsInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="SimulationsLabel" type="Label" parent="RunDataContainer"]
+[node name="SimulationsLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 text = "Simulations"
 
-[node name="SimulationsInput" type="SpinBox" parent="RunDataContainer"]
+[node name="SimulationsInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
 layout_mode = 2
 max_value = 99999.0
 value = 5000.0
 
-[node name="CharacterDataContainer" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 28.0
-offset_top = 234.0
-offset_right = 549.0
-offset_bottom = 274.0
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/RunDataContainer"]
+layout_mode = 2
 
-[node name="CharacterLabel" type="Label" parent="CharacterDataContainer"]
+[node name="CharacterDataContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="CharacterLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer"]
 layout_mode = 2
 text = "Characters"
 
-[node name="CharacterInput" type="SpinBox" parent="CharacterDataContainer"]
+[node name="CharacterInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 value = 1.0
 
-[node name="CharacterPityLabel" type="Label" parent="CharacterDataContainer"]
+[node name="CharacterPityLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer"]
 layout_mode = 2
 text = "Character Pity"
 
-[node name="CharacterPityInput" type="SpinBox" parent="CharacterDataContainer"]
+[node name="CharacterPityInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="CharGuaranteeInput" type="CheckBox" parent="CharacterDataContainer"]
+[node name="CharGuaranteeInput" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer/CharacterDataContainer"]
 layout_mode = 2
 text = "Guarantee?"
 
-[node name="WeaponDataContainer" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 28.0
-offset_top = 316.0
-offset_right = 549.0
-offset_bottom = 356.0
+[node name="WeaponDataContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
 
-[node name="WeaponLabel" type="Label" parent="WeaponDataContainer"]
+[node name="WeaponLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer"]
 layout_mode = 2
 text = "Weapons"
 
-[node name="WeaponInput" type="SpinBox" parent="WeaponDataContainer"]
+[node name="WeaponInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="WeaponPityLabel" type="Label" parent="WeaponDataContainer"]
+[node name="WeaponPityLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer"]
 layout_mode = 2
 text = "Weapon Pity"
 
-[node name="WeaponPityInput" type="SpinBox" parent="WeaponDataContainer"]
+[node name="WeaponPityInput" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer"]
 layout_mode = 2
 max_value = 100000.0
 
-[node name="WepGuaranteeInput" type="CheckBox" parent="WeaponDataContainer"]
+[node name="WepGuaranteeInput" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer/WeaponDataContainer"]
 layout_mode = 2
 text = "Guarantee?"
 
 [connection signal="pressed" from="RunButton" to="." method="_on_run_button_pressed"]
-[connection signal="item_selected" from="BannersOption" to="." method="_on_option_button_item_selected"]
-[connection signal="item_selected" from="CopiesButton" to="." method="_on_copies_button_item_selected"]
+[connection signal="tab_selected" from="MarginContainer/HBoxContainer/VBoxContainer/BannerTabBar" to="." method="_on_banner_tab_bar_tab_selected"]
