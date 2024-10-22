@@ -1,20 +1,20 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1729319276
+::res://::1729580967
 export_presets.cfg::TextFile::-1::1729041117::0::1::::<><>::
 icon.svg::CompressedTexture2D::8784881301482435818::1727990531::1729315753::1::::<><>::
 README.md::TextFile::-1::1728181243::0::1::::<><>::
 ::res://assets/::1729319276
 ::res://assets/logos/::1729319150
-::res://assets/logos/hsr/::1729319132
+::res://assets/logos/hsr/::1729319276
 Star Rail Icon.png::CompressedTexture2D::7271326481216957469::1729319121::1729319276::1::::<><>::
-::res://assets/logos/wuwa/::1729319155
+::res://assets/logos/wuwa/::1729319276
 Wuthering Waves Icon.png::CompressedTexture2D::7726984398522189129::1729319143::1729319276::1::::<><>::
 ::res://resources/::1729315720
 HSRBanner.tres::Resource/Banner::6130381922056264094::1729032714::0::1::::<><>::res://scripts/Banner.gd
 WuWaBanner.tres::Resource/Banner::2332219525571353917::1729315720::0::1::::<><>::res://scripts/Banner.gd
-::res://scenes/::1729318541
-pull_simulator.tscn::PackedScene::7337679819539550296::1729318541::0::1::::<><>::res://scripts/pull_simulator.gd
-::res://scripts/::1729317924
+::res://scenes/::1729574347
+pull_simulator.tscn::PackedScene::7337679819539550296::1729574347::0::1::::<><>::res://scripts/pull_simulator.gd
+::res://scripts/::1729574347
 Banner.gd::GDScript::-1::1729315720::0::1::::Banner<>Resource<>::
-pull_simulator.gd::GDScript::-1::1729317924::0::1::::<>Control<>::
+pull_simulator.gd::GDScript::-1::1729574347::0::1::::<>Control<>::
 run_data.gd::GDScript::-1::1729315720::0::1::::RunData<>RefCounted<>::

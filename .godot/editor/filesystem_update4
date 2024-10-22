@@ -1,2 +1,4 @@
 res://scenes/pull_simulator.tscn
 res://scripts/pull_simulator.gd
+res://resources/WuWaBanner.tres
+res://scripts/Banner.gd

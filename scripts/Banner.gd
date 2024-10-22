@@ -32,7 +32,7 @@ const COIN_FLIP_CHANCE = 0.5
 @export_group("4-Star Info")
 @export_range(0.0, 1.0) var four_star_pull_rate: float
 @export var four_star_soft_pity_start: int
-@export_range(0.0, 1.0) var four_star_soft_pity_rate: float
+@export_range(0.0, 1.0) var four_star_soft_pity_rate: float # WuWa has no soft pity for 4* characters
 @export var four_star_hard_pity: int
 @export_range(0.0, 1.0) var four_star_fifty_fifty: float
 
